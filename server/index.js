@@ -2,8 +2,9 @@ var app = require('express')();
 var server = require('http').Server(app);
 var fetch = require('node-fetch');
 var io = require('socket.io')(server, { path: '/sockets'});
+var dbip = process.env.DBIP || 'localhost';
 var dbport = process.env.DBPORT || 5000;
-var url = 'http://localhost:' + dbport + '/';
+var url = 'http://' + dbip + ':' + dbport + '/';
 
 var port = process.env.PORT || 5500;
 server.listen(port, function() {
