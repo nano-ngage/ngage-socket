@@ -17,5 +17,5 @@ deployment:
     branch: master
     commands:
       - docker login -e nanongage@gmail.com -u nanongage -p $DOCKER_PW
-      - docker push nanongage/ngage-db
+      - docker push nanongage/ngage-socket
       - sh ./deploy.sh
