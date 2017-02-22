@@ -15,6 +15,7 @@ app.get('/', (req, res) => {res.end()});
 var nsp = io.of('/ngage');
 nsp.on('connection', function (socket) {
     socket.on('subscribe', data => { 
+      console.log(data.room);
       socket.join(data.room); 
       socket.emit('join');
     })
@@ -32,6 +33,7 @@ nsp.on('connection', function (socket) {
       })
     });
     socket.on('submitResponse', data => {
-      fetch(url + 'rPost', { method: 'POST', headers: {"Content-Type": "application/json"}, mode: 'cors',body: data });
+      nsp.in(data.room).emit('resp', data);
+      fetch(url + 'rPost', { method: 'POST', headers: {"Content-Type": "application/json"}, mode: 'cors',body: JSON.stringify(data) });
     });
 });
