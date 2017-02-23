@@ -14,16 +14,16 @@ server.listen(port, function() {
 app.get('/', (req, res) => {res.end()});
 var nsp = io.of('/ngage');
 nsp.on('connection', function (socket) {
-    socket.on('subscribe', data => { 
+    socket.on('subscribe', data => {
       console.log(data.room);
-      socket.join(data.room); 
+      socket.join(data.room);
       socket.emit('join');
     })
     socket.on('unsubscribe', function(data) { socket.leave(data.room); })
     socket.on('start', function (data) {
       //socket.broadcast.to(data.room).emit('start');
       nsp.in(data.room).emit('start', '');
-      fetch(url + 'qBySocket/' + data.room).then(res => res.json()).then(questions => {
+      fetch(url + 'qByS/' + data.room).then(res => res.json()).then(questions => {
         nsp.in(data.room).emit('questions', questions);
       })
     });
@@ -34,6 +34,6 @@ nsp.on('connection', function (socket) {
     });
     socket.on('submitResponse', data => {
       nsp.in(data.room).emit('resp', data);
-      fetch(url + 'rPost', { method: 'POST', headers: {"Content-Type": "application/json"}, mode: 'cors',body: JSON.stringify(data) });
+      fetch(url + 'r', { method: 'POST', headers: {"Content-Type": "application/json"}, mode: 'cors',body: JSON.stringify(data) });
     });
 });
