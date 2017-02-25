@@ -9,6 +9,8 @@ dependencies:
 
 test:
   override:
+    - npm install
+    - npm test
     - docker run -d -p 5500:5500 nanongage/ngage-socket; sleep 10
     - curl --retry 10 --retry-delay 5 -v http://localhost:5500/
 

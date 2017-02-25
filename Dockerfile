@@ -1,12 +1,11 @@
-FROM netczuk/node-yarn
+FROM node:boron
 # Create app directory
 RUN mkdir -p /usr/src/socket
 WORKDIR /usr/src/socket
 # Install app dependencies
 COPY package.json /usr/src/socket/
-COPY yarn.lock /usr/src/socket/
-RUN yarn
+RUN npm install
 # Bundle app source
 COPY . /usr/src/socket
 EXPOSE 5500
-CMD [ "yarn", "start" ]
+CMD [ "npm", "start" ]
