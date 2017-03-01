@@ -55,6 +55,35 @@ nsp.on('connection', function (socket) {
       .catch(e => { socket.emit('responseSubmit', 'Server is unavailable'); });
   });
 
+  socket.on('submitAudQuestion', data => {
+    nsp.in(data.room).emit('audquestions', data);
+
+    fetch(url + 'aqByS', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        mode: 'cors',
+        body: JSON.stringify(data)
+      })
+      .catch(err => {
+        console.error('Oops, couldn\'t post audquestion to DB', err);
+        socket.emit('audQuestionSubmit', 'Server is unavailable');
+      });
+  })
+
+  socket.on('upvoteAudQuestio', data => {
+    nsp.in(data.room).emit('upvote', data);
+
+    fetch(url + 'aq', {
+        method: 'PUT',
+        headers: { "Content-Type": "application/json" },
+        mode: 'cors',
+        body: JSON.stringify(data)
+      })
+      .catch(err => {
+        console.error('Oops, could\'t update audquestion in DB', err);
+        socket.emit('audQuestionUpvote', 'Server is unavailable');
+      });
+  })
 });
 
 module.exports = server;
