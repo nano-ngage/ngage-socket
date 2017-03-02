@@ -6,6 +6,8 @@ var dbip = process.env.DBIP || 'localhost';
 var dbport = process.env.DBPORT || 5000;
 var url = 'http://' + dbip + ':' + dbport + '/';
 
+var fetchOptions = require('./helpers').fetchOptions;
+
 app.get('/', (req, res) => {res.end()});
 
 function handleErrors(response) {
@@ -46,25 +48,17 @@ nsp.on('connection', function (socket) {
 
   socket.on('submitResponse', data => {
     nsp.in(data.room).emit('resp', data);
+    var options = fetchOptions('POST', data);
 
-    fetch(url + 'r', {
-        method: 'POST',
-        headers: {"Content-Type": "application/json"},
-        mode: 'cors',
-        body: JSON.stringify(data)
-      })
+    fetch(url + 'r', options)
       .catch(e => { socket.emit('responseSubmit', 'Server is unavailable'); });
   });
 
   socket.on('submitAudQuestion', data => {
     nsp.in(data.room).emit('audquestions', data);
+    var options = fetchOptions('POST', data);
 
-    fetch(url + 'aqByS/', {
-        method: 'POST',
-        headers: { "Content-Type": "application/json" },
-        mode: 'cors',
-        body: JSON.stringify(data)
-      })
+    fetch(url + 'aqByS/', options)
       .catch(err => {
         socket.emit('audQuestionSubmit', 'Server is unavailable');
       });
@@ -72,13 +66,9 @@ nsp.on('connection', function (socket) {
 
   socket.on('upvoteAudQuestion', data => {
     nsp.in(data.room).emit('upvote', data.audQuestionID);
+    var options = fetchOptions('PUT', data);
 
-    fetch(url + 'aq/' + data.audQuestionID, {
-        method: 'PUT',
-        headers: { "Content-Type": "application/json" },
-        mode: 'cors',
-        body: JSON.stringify(data)
-      })
+    fetch(url + 'aq/' + data.audQuestionID, options)
       .catch(err => {
         socket.emit('audQuestionUpvote', 'Server is unavailable');
       });
