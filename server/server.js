@@ -36,6 +36,7 @@ nsp.on('connection', function (socket) {
   });
 
   socket.on('askQ', function (data) {
+
     fetch(url + 'aByQ/' + data.question.questionID)
       .then(handleErrors)
       .then(res => res.json())
@@ -65,7 +66,6 @@ nsp.on('connection', function (socket) {
         body: JSON.stringify(data)
       })
       .catch(err => {
-        console.error('Oops, couldn\'t post audQuestion to DB', err);
         socket.emit('audQuestionSubmit', 'Server is unavailable');
       });
   })
@@ -80,7 +80,6 @@ nsp.on('connection', function (socket) {
         body: JSON.stringify(data)
       })
       .catch(err => {
-        console.error('Oops, could\'t update audquestion in DB', err);
         socket.emit('audQuestionUpvote', 'Server is unavailable');
       });
   })
