@@ -12,6 +12,7 @@ var options ={
 describe("Chat Server",function(){
   var server;
   var client1, client2;
+
   before(function() {
     server = app.listen(4568, function() {
       console.log('Server is listening on 4568');
@@ -19,22 +20,25 @@ describe("Chat Server",function(){
     client1 = io.connect(socketURL, options);
     client2 = io.connect(socketURL, options);
   });
+
   after(function() {
     server.close();
   });
+
   it('Should broadcast new user to all users', function(done){
     this.timeout(5000);
     client1.emit('subscribe', {room: 'channel'});
     client1.on('join', data => {
-      client2.emit('subscribe', {room: 'channel'});   
+      client2.emit('subscribe', {room: 'channel'});
       client2.on('join', data => {
         client1.emit('start', {room: 'channel'});
         client2.on('start', data => {
           done();
         })
-      })   
+      })
     })
   });
+
   it('Should receive askQ socket and receive a server is unavailable message', function(done){
     this.timeout(5000);
     client1.emit('askQ', {question: {questionID:5}});
@@ -43,6 +47,7 @@ describe("Chat Server",function(){
       done();
     })
   });
+
   it('Should receive submitResponse socket and receive a server is unavailable message', function(done){
     this.timeout(5000);
     client1.emit('submitResponse', 'Test Data');
@@ -50,5 +55,14 @@ describe("Chat Server",function(){
       expect(data).to.equal('Server is unavailable');
       done();
     })
+  });
+
+  it('Should receive submitAudQuestion socket and receive a server is unavailable message', function(done) {
+    this.timeout(5000);
+    client1.emit('submitAudQuestion', 'Is this an awesome question?');
+    client1.on('audQuestionSubmit', data => {
+      expect(data).to.equal('Server is unavailable');
+      done();
+    });
   });
 });
