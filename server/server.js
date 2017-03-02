@@ -59,9 +59,7 @@ nsp.on('connection', function (socket) {
     var options = fetchOptions('POST', data);
 
     fetch(url + 'aqByS/', options)
-      .catch(err => {
-        socket.emit('audQuestionSubmit', 'Server is unavailable');
-      });
+      .catch(err => { socket.emit('audQuestionSubmit', 'Server is unavailable'); });
   })
 
   socket.on('upvoteAudQuestion', data => {
@@ -69,9 +67,7 @@ nsp.on('connection', function (socket) {
     var options = fetchOptions('PUT', data);
 
     fetch(url + 'aq/' + data.audQuestionID, options)
-      .catch(err => {
-        socket.emit('audQuestionUpvote', 'Server is unavailable');
-      });
+      .catch(err => { socket.emit('audQuestionUpvote', 'Server is unavailable'); });
   })
 });
 
