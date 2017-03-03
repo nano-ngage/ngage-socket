@@ -55,10 +55,10 @@ nsp.on('connection', function (socket) {
   });
 
   socket.on('submitAudQuestion', data => {
-    nsp.in(data.room).emit('audquestions', data);
-    var options = fetchOptions('POST', data);
 
+    var options = fetchOptions('POST', data);
     fetch(url + 'aqByS/', options)
+      .then(audQuestion => { nsp.in(data.room).emit('audquestions', audQuestion); })
       .catch(err => { socket.emit('audQuestionSubmit', 'Server is unavailable'); });
   })
 
