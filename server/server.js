@@ -38,12 +38,21 @@ nsp.on('connection', function (socket) {
   });
 
   socket.on('askQ', function (data) {
-
     fetch(url + 'aByQ/' + data.question.questionID)
       .then(handleErrors)
       .then(res => res.json())
       .then(answers => { nsp.in(data.room).emit('answers', {answers: answers, question: data.question}); })
       .catch(e => { socket.emit('answers', 'Server is unavailable'); })
+  });
+
+  socket.on('showA', function(data) {
+    fetch(url + 'aByCorrect/' + data.questionID)
+    .then(handleErrors)
+    .then(res => res.json())
+    .then(correct => {nsp.in(data.room).emit('correct', {
+      correct: correct
+    })})
+    .catch(e => {socket.emit('correct', 'Server is unavailable to get correct answer')})
   });
 
   socket.on('submitResponse', data => {
