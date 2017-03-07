@@ -28,9 +28,9 @@ describe("Chat Server",function(){
   it('Should broadcast new user to all users', function(done){
     this.timeout(5000);
     client1.emit('subscribe', {room: 'channel'});
-    client1.on('join', data => {
+    client1.on('participantSubmit', data => {
       client2.emit('subscribe', {room: 'channel'});
-      client2.on('join', data => {
+      client2.on('participantSubmit', data => {
         client1.emit('start', {room: 'channel'});
         client2.on('start', data => {
           done();
