@@ -23,7 +23,11 @@ var nsp = io.of('/ngage');
 nsp.on('connection', function (socket) {
   socket.on('subscribe', data => {
     socket.join(data.room);
-    socket.emit('join');
+    var options = fetchOptions('POST', data);
+    fetch(url + 'pa', options)
+      .then(res => {nsp.in(data.room).emit('addparticipant')})
+      .catch(e => { socket.emit('participantSubmit', 'Server is unavailable'); });
+    // socket.emit('join');
   });
 
   socket.on('unsubscribe', function(data) { socket.leave(data.room); })
