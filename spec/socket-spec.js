@@ -48,6 +48,15 @@ describe("Chat Server",function(){
     })
   });
 
+  it('Should receive showA socket and receive a server is unavailable message', function(done){
+    this.timeout(5000);
+    client1.emit('showA', {questionID:5});
+    client1.on('correct', data => {
+      expect(data).to.equal('Server is unavailable to get correct answer');
+      done();
+    })
+  });
+
   it('Should receive submitResponse socket and receive a server is unavailable message', function(done){
     this.timeout(5000);
     client1.emit('submitResponse', 'Test Data');
