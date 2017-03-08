@@ -86,24 +86,30 @@ nsp.on('connection', function (socket) {
   });
 
   socket.on('enableAsk', data => {
-    // for the actual rooms
-    nsp.in(data.room).emit('askenabled', data.askEnabled);
 
     var options = fetchOptions('PUT', { flag: data.askEnabled });
     fetch(url + 'sAsk/' + data.sessionID, options)
+      .then(handleErrors)
+      .then(res => res.json())
+      .then(session => { nsp.in(data.room).emit('askenabled', session.askEnabled); })
       .catch(err => { socket.emit('askenabled', 'Server is unavailable') })
 
   });
 
+
+
   socket.on('enableAudQ', data => {
-    // for the actual rooms
-    nsp.in(data.room).emit('audqenabled', data.audQEnabled);
 
     var options = fetchOptions('PUT', { flag: data.audQEnabled });
     fetch(url + 'sAudQ/' + data.sessionID, options)
+      .then(handleErrors)
+      .then(res => res.json())
+      .then(session => { nsp.in(data.room).emit('audqenabled', session.audQEnabled); })
       .catch(err => { socket.emit('audqenabled', 'Server is unavailable') })
 
   });
+
+
 
 
 });
