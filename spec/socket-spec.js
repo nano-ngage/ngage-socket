@@ -74,4 +74,14 @@ describe("Chat Server",function(){
       done();
     });
   });
+
+  it('Should receive enableQA socket and receive a boolean value', function(done) {
+    this.timeout(5000);
+    client1.emit('enableQA', { qaModal: true });
+    client1.on('qamodal', data => {
+      expect(data).to.equal(true);
+      done();
+    });
+  });
+
 });
