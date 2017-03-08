@@ -85,13 +85,30 @@ nsp.on('connection', function (socket) {
       .catch(err => { socket.emit('audQuestionUpvote', 'Server is unavailable'); });
   });
 
-  socket.on('enableQA', data => {
+  socket.on('enableAsk', data => {
     // for the actual rooms
-    nsp.in(data.room).emit('qamodal', data.qaModal);
+    nsp.in(data.room).emit('askenabled', data.askEnabled);
 
-    // for the tests
+
+    // TODO: need to add fetch put request here
+    // for the tests --> (can probably change since we
+    // are now going to use a database call
     if (!data.room) {
-      socket.emit('qamodal', data.qaModal);
+      socket.emit('askenabled', data.askEnabled);
+    }
+
+  });
+
+  socket.on('enableAudQ', data => {
+    // for the actual rooms
+    nsp.in(data.room).emit('audqenabled', data.audQEnabled);
+
+
+    // TODO: need to add fetch put request here
+    // for the tests --> (can probably change since we
+    // are now going to use a database call
+    if (!data.room) {
+      socket.emit('audqenabled', data.audQEnabled);
     }
 
   });
