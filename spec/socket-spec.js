@@ -79,7 +79,7 @@ describe("Chat Server",function(){
     this.timeout(5000);
     client1.emit('enableAsk', { askEnabled: true });
     client1.on('askenabled', data => {
-      expect(data).to.equal(true);
+      expect(data).to.equal('Server is unavailable');
       done();
     });
   });
@@ -88,7 +88,7 @@ describe("Chat Server",function(){
     this.timeout(5000);
     client1.emit('enableAudQ', { audQEnabled: true });
     client1.on('audqenabled', data => {
-      expect(data).to.equal(true);
+      expect(data).to.equal('Server is unavailable');
       done();
     });
   });
