@@ -89,13 +89,9 @@ nsp.on('connection', function (socket) {
     // for the actual rooms
     nsp.in(data.room).emit('askenabled', data.askEnabled);
 
-
-    // TODO: need to add fetch put request here
-    // for the tests --> (can probably change since we
-    // are now going to use a database call
-    if (!data.room) {
-      socket.emit('askenabled', data.askEnabled);
-    }
+    var options = fetchOptions('PUT', {flag: data.askEnabled});
+    fetch(url + 'sAsk/' + data.sessionID, options)
+      .catch(err => { socket.emit('askenabled', 'Server is unavailable') })
 
   });
 
@@ -103,13 +99,9 @@ nsp.on('connection', function (socket) {
     // for the actual rooms
     nsp.in(data.room).emit('audqenabled', data.audQEnabled);
 
-
-    // TODO: need to add fetch put request here
-    // for the tests --> (can probably change since we
-    // are now going to use a database call
-    if (!data.room) {
-      socket.emit('audqenabled', data.audQEnabled);
-    }
+    var options = fetchOptions('PUT', {flag: data.audQEnabled});
+    fetch(url + 'sAudQ/' + data.sessionID, options)
+      .catch(err => { socket.emit('audqenabled', 'Server is unavailable') })
 
   });
 
