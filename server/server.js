@@ -75,7 +75,7 @@ nsp.on('connection', function (socket) {
       .then(res => res.json())
       .then(audQuestion => { nsp.in(data.room).emit('audquestions', audQuestion); })
       .catch(err => { socket.emit('audQuestionSubmit', 'Server is unavailable'); });
-  })
+  });
 
   socket.on('upvoteAudQuestion', data => {
     nsp.in(data.room).emit('upvote', data.audQuestionID);
@@ -83,7 +83,20 @@ nsp.on('connection', function (socket) {
 
     fetch(url + 'aq/' + data.audQuestionID, options)
       .catch(err => { socket.emit('audQuestionUpvote', 'Server is unavailable'); });
-  })
+  });
+
+  socket.on('enableQA', data => {
+    // for the actual rooms
+    nsp.in(data.room).emit('qamodal', data.qaModal);
+
+    // for the tests
+    if (!data.room) {
+      socket.emit('qamodal', data.qaModal);
+    }
+
+  });
+
+
 });
 
 module.exports = server;
