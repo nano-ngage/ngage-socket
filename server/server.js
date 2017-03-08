@@ -89,7 +89,7 @@ nsp.on('connection', function (socket) {
     // for the actual rooms
     nsp.in(data.room).emit('askenabled', data.askEnabled);
 
-    var options = fetchOptions('PUT', {flag: data.askEnabled});
+    var options = fetchOptions('PUT', { flag: data.askEnabled });
     fetch(url + 'sAsk/' + data.sessionID, options)
       .catch(err => { socket.emit('askenabled', 'Server is unavailable') })
 
@@ -99,7 +99,7 @@ nsp.on('connection', function (socket) {
     // for the actual rooms
     nsp.in(data.room).emit('audqenabled', data.audQEnabled);
 
-    var options = fetchOptions('PUT', {flag: data.audQEnabled});
+    var options = fetchOptions('PUT', { flag: data.audQEnabled });
     fetch(url + 'sAudQ/' + data.sessionID, options)
       .catch(err => { socket.emit('audqenabled', 'Server is unavailable') })
 
