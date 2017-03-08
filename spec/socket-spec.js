@@ -75,10 +75,19 @@ describe("Chat Server",function(){
     });
   });
 
-  it('Should receive enableQA socket and receive a boolean value', function(done) {
+  it('Should receive enableAsk socket and receive a boolean value', function(done) {
     this.timeout(5000);
-    client1.emit('enableQA', { qaModal: true });
-    client1.on('qamodal', data => {
+    client1.emit('enableAsk', { askEnabled: true });
+    client1.on('askenabled', data => {
+      expect(data).to.equal(true);
+      done();
+    });
+  });
+
+  it('Should receive enableAudQ socket and receive a boolean value', function(done) {
+    this.timeout(5000);
+    client1.emit('enableAudQ', { audQEnabled: true });
+    client1.on('audqenabled', data => {
       expect(data).to.equal(true);
       done();
     });
